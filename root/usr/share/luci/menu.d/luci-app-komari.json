@@ -1,0 +1,15 @@
+{
+  "admin/services/komari": {
+    "title": "Komari",
+    "order": 92,
+    "action": {
+      "type": "view",
+      "path": "komari/overview"
+    },
+    "depends": {
+      "acl": [
+        "luci-app-komari"
+      ]
+    }
+  }
+}

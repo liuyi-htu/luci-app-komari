@@ -1,0 +1,116 @@
+#!/bin/sh
+set -u
+. /usr/libexec/komari-common
+RAM=/tmp/komari/update
+LOCK=$RAM/lock
+OPLOCK=/tmp/komari/operation-lock
+STATUS=$RAM/status
+WORKDIR=
+UPLOAD=
+HELD=0
+LOG_PID=
+log() { logger -t komari-server-update "$*"; }
+
+progress() {
+ printf '%s\t%s\t%s\n' "$1" "$2" "$3" > "$STATUS.$$" && mv -f "$STATUS.$$" "$STATUS"
+}
+cleanup() {
+ if [ -n "$LOG_PID" ]; then
+  sleep 0.1
+  kill "$LOG_PID" 2>/dev/null || true
+  wait "$LOG_PID" 2>/dev/null || true
+ fi
+ [ -z "$WORKDIR" ] || rm -rf "$WORKDIR"
+ [ -z "$UPLOAD" ] || rm -f "$UPLOAD"
+ rm -f "$STATUS.$$" /usr/bin/.komari-new.$$
+ [ "$HELD" = 0 ] || rmdir "$OPLOCK" 2>/dev/null
+ rmdir "$LOCK" 2>/dev/null || true
+}
+fail() { log "Update failed: $*"; progress error 100 "Update failed: $*"; exit 1; }
+version_gt() {
+ awk -v left="$1" -v right="$2" 'BEGIN {
+  split(left,a,"."); split(right,b,".");
+  for(i=1;i<=3;i++){if((a[i]+0)>(b[i]+0))exit 0;if((a[i]+0)<(b[i]+0))exit 1}exit 1
+ }'
+}
+release_arch() {
+ case "$(uname -m)" in
+  aarch64|arm64) echo arm64 ;;
+  x86_64|amd64) echo amd64 ;;
+  i?86) echo 386 ;;
+  riscv64) echo riscv64 ;;
+  loongarch64) echo loong64 ;;
+  *) return 1 ;;
+ esac
+}
+extract_candidate() {
+ local member
+ member="$(tar -tzf "$1" 2>/dev/null | awk '/(^|\/)komari(-linux-[a-z0-9]+)?$/ {print;exit}')"
+ [ -n "$member" ] || return 1
+ case "$member" in /*|*../*|../*) return 1 ;; esac
+ # Stream a single member; never extract paths or symlinks into the work directory.
+ tar -xOzf "$1" "$member" > "$WORKDIR/komari" 2>/dev/null && [ -s "$WORKDIR/komari" ]
+}
+install_candidate() {
+ progress running 75 'Verifying candidate Komari...'
+ [ "$(head -c 4 "$WORKDIR/komari")" = "$(printf '\177ELF')" ] || fail 'The candidate is not a Linux ELF executable'
+ chmod 0755 "$WORKDIR/komari" || fail 'Failed to make the candidate executable'
+ candidate="$(komari_version "$WORKDIR/komari")"
+ [ -n "$candidate" ] || fail 'The candidate is not a valid Komari executable for this device'
+ current="$(komari_version /usr/bin/komari || true)"
+ if [ -n "$current" ] && ! version_gt "$candidate" "$current"; then
+  progress success 100 'The installed core is already up to date.'
+  log 'The installed core is already up to date.'
+  return 0
+ fi
+ pidof komari >/dev/null 2>&1 && fail 'Stop Komari before making changes.'
+ progress running 88 'Installing Komari...'
+ cp "$WORKDIR/komari" /usr/bin/.komari-new.$$ && chmod 0755 /usr/bin/.komari-new.$$ || fail 'Failed to write new Komari'
+ mv -f /usr/bin/.komari-new.$$ /usr/bin/komari || fail 'Failed to install new Komari'
+ log "Komari updated to $candidate."
+ progress success 100 "Komari updated to $candidate."
+}
+[ "$#" -ge 1 ] || exit 2
+mkdir -p "$RAM" || exit 1
+chmod 0700 /tmp/komari "$RAM"
+mkdir "$LOCK" 2>/dev/null || exit 1
+trap cleanup EXIT
+trap 'fail "Update interrupted"' INT TERM
+/usr/libexec/komari-log-writer server-update &
+LOG_PID=$!
+sleep 0.2
+mkdir "$OPLOCK" 2>/dev/null || fail 'An operation is in progress. Try again later.'
+HELD=1
+pidof komari >/dev/null 2>&1 && fail 'Stop Komari before making changes.'
+WORKDIR="$(mktemp -d "$RAM/work.XXXXXX")" || fail 'Failed to create temporary work directory'
+progress running 5 'Update started.'
+case "$1" in
+ online)
+  [ "$#" = 1 ] || fail 'Invalid arguments'
+  progress running 15 'Checking the latest GitHub release...'
+  metadata=$WORKDIR/release.json
+  uclient-fetch -q -O "$metadata" 'https://api.github.com/repos/komari-monitor/komari/releases/latest' || fail 'Failed to query the latest GitHub release'
+  arch="$(release_arch)" || fail 'Online update does not support this CPU architecture'
+  asset="komari-linux-$arch"
+  url="$(jsonfilter -i "$metadata" -e "@.assets[@.name=\"$asset\"].browser_download_url")"
+  case "$url" in https://github.com/komari-monitor/komari/releases/download/*/komari-linux-*) ;; *) fail 'No official release asset exists for this CPU architecture' ;; esac
+  progress running 45 'Downloading Komari...'
+  uclient-fetch -q -O "$WORKDIR/komari" "$url" || fail 'Failed to download the latest release'
+  digest="$(jsonfilter -i "$metadata" -e "@.assets[@.name=\"$asset\"].digest" 2>/dev/null || true)"
+  case "$digest" in
+   sha256:*) actual="$(sha256sum "$WORKDIR/komari")"; [ "${actual%% *}" = "${digest#sha256:}" ] || fail 'Release checksum verification failed' ;;
+  esac
+  install_candidate
+  ;;
+ local)
+  [ "$#" = 2 ] || fail 'Missing upload'
+  [ "$2" = /tmp/komari/uploads/komari-upload.tar.gz ] || fail 'Invalid upload path'
+  UPLOAD="$2"
+  [ -s "$UPLOAD" ] && [ ! -L "$UPLOAD" ] || fail 'The uploaded file is empty'
+  [ "$(wc -c < "$UPLOAD")" -le 134217728 ] || fail 'The uploaded file must not exceed 128 MiB.'
+  progress running 35 'Reading upload...'
+  extract_candidate "$UPLOAD" || cp "$UPLOAD" "$WORKDIR/komari" || fail 'Failed to read upload'
+  install_candidate
+  ;;
+ *) fail 'Unsupported update method' ;;
+esac

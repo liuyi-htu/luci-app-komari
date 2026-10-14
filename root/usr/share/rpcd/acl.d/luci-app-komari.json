@@ -1,0 +1,45 @@
+{
+  "luci-app-komari": {
+    "description": "Manage the Komari server",
+    "read": {
+      "uci": [
+        "komari",
+        "komari_agent"
+      ],
+      "file": {
+        "/usr/libexec/komari-read": [
+          "exec"
+        ],
+        "/usr/libexec/komari-agent-read": [
+          "exec"
+        ]
+      }
+    },
+    "write": {
+      "file": {
+        "/usr/libexec/komari-ui": [
+          "exec"
+        ],
+        "/tmp/komari/uploads/settings.json": [
+          "write",
+          "remove"
+        ],
+        "/tmp/komari/uploads/komari-upload.tar.gz": [
+          "write",
+          "remove"
+        ],
+        "/usr/libexec/komari-agent-ui": [
+          "exec"
+        ],
+        "/tmp/komari-agent/uploads/settings.json": [
+          "write",
+          "remove"
+        ],
+        "/tmp/komari-agent/uploads/komari-agent-upload.tar.gz": [
+          "write",
+          "remove"
+        ]
+      }
+    }
+  }
+}

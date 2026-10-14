@@ -1,0 +1,102 @@
+#!/bin/sh
+# OpenWrt functions.sh expects unset environment variables.
+. /lib/functions.sh
+. /usr/libexec/komari-common
+INIT=/etc/init.d/komari
+RAM=/tmp/komari
+UPLOAD=$RAM/uploads/komari-upload.tar.gz
+SETTINGS=$RAM/uploads/settings.json
+LOCK=$RAM/update/lock
+OPLOCK=$RAM/operation-lock
+HELD=0
+fail() { printf '%s\n' "$*" >&2; exit 1; }
+running() {
+ [ "$(ubus call service list '{"name":"komari"}' 2>/dev/null | jsonfilter -e '@["komari"].instances.server.running' 2>/dev/null)" = true ]
+}
+cleanup() { [ "$HELD" = 0 ] || rmdir "$OPLOCK" 2>/dev/null; }
+trap cleanup EXIT
+trap 'exit 1' INT TERM
+mkdir -p "$RAM/uploads" "$RAM/update" || exit 1
+chmod 0700 "$RAM" "$RAM/uploads" "$RAM/update"
+mutation() {
+ mkdir "$OPLOCK" 2>/dev/null || fail 'An operation is in progress. Try again later.'
+ HELD=1
+ [ ! -d "$LOCK" ] || fail 'An update is already in progress.'
+}
+stopped() { running && fail 'Stop Komari before making changes.'; return 0; }
+log_category() {
+ case "$1" in
+  komari) CATEGORY=server ;;
+  update) CATEGORY=server-update ;;
+  *) fail 'Unsupported log type' ;;
+ esac
+}
+
+case "${1:-}" in
+ status)
+  [ "$#" = 1 ] || fail 'Invalid arguments'
+  active=0; enabled=0
+  running && active=1
+  "$INIT" enabled >/dev/null 2>&1 && enabled=1
+  version="$(/usr/libexec/komari-cached-version read server || true)"
+  printf '%s\t%s\t%s\n' "$active" "$enabled" "${version:-Not installed}"
+  ;;
+ service)
+  [ "$#" = 2 ] || fail 'Invalid arguments'
+  mutation
+  case "$2" in
+   start)
+    stopped
+    komari_load || exit 1
+    [ -x /usr/bin/komari ] || fail 'Komari executable is not installed'
+    uci -q set komari.main.enabled=1 && uci -q commit komari || fail 'Failed to save configuration'
+    ;;
+   stop|enable|disable) ;;
+   *) fail 'Unsupported service action' ;;
+  esac
+  "$INIT" "$2" || fail 'Service action failed'
+  if [ "$2" = start ]; then
+   sleep 2
+   running || fail 'Komari failed to start. Check the log.'
+  fi
+  ;;
+ save-settings)
+  [ "$#" = 1 ] || fail 'Invalid arguments'
+  mutation; stopped
+  [ -s "$SETTINGS" ] && [ "$(wc -c < "$SETTINGS")" -le 16384 ] || fail 'Invalid settings upload'
+  listen_host="$(jsonfilter -i "$SETTINGS" -e '@.listen_host')" || fail 'Invalid settings upload'
+  listen_port="$(jsonfilter -i "$SETTINGS" -e '@.listen_port')" || fail 'Invalid settings upload'
+  data_dir="$(jsonfilter -i "$SETTINGS" -e '@.data_dir')" || fail 'Invalid settings upload'
+  komari_validate || exit 1
+  uci -q set "komari.main.listen_host=$listen_host" &&
+  uci -q set "komari.main.listen_port=$listen_port" &&
+  uci -q set "komari.main.data_dir=$data_dir" &&
+  uci -q commit komari || fail 'Failed to save configuration'
+  rm -f "$SETTINGS"
+  printf '%s\n' 'Configuration saved. Start the service manually.'
+  ;;
+ read-log|clear-log)
+  [ "$#" = 2 ] || fail 'Invalid arguments'
+  log_category "$2"
+  case "$1" in read-log) action=read ;; clear-log) action=clear ;; esac
+  /usr/libexec/komari-system-log "$action" "$CATEGORY" || fail 'Failed to read system log'
+  ;;
+ update-online|update-local)
+  [ "$#" = 1 ] || fail 'Invalid arguments'
+  stopped
+  [ ! -d "$LOCK" ] && [ ! -d "$OPLOCK" ] || fail 'An update is already in progress.'
+  printf 'running\t1\tUpdate started.\n' > "$RAM/update/status"
+  if [ "$1" = update-online ]; then
+   /sbin/start-stop-daemon -S -b -O /dev/null -x /usr/libexec/komari-update -- online || fail 'Failed to start update'
+  else
+   [ -s "$UPLOAD" ] || fail 'The uploaded file is empty'
+   /sbin/start-stop-daemon -S -b -O /dev/null -x /usr/libexec/komari-update -- local "$UPLOAD" || fail 'Failed to start update'
+  fi
+  printf '%s\n' 'Update started.'
+  ;;
+ update-status)
+  [ "$#" = 1 ] || fail 'Invalid arguments'
+  if [ -s "$RAM/update/status" ]; then cat "$RAM/update/status"; else printf 'idle\t0\tNo update has started.\n'; fi
+  ;;
+ *) fail 'Unsupported command' ;;
+esac

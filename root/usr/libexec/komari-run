@@ -1,0 +1,5 @@
+#!/bin/sh
+[ "$#" -ge 2 ] || exit 2
+cd "$1" || exit 1
+umask 077
+exec /usr/bin/komari server --listen "$2" --database "$1/data/komari.db"

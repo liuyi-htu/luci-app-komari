@@ -1,0 +1,118 @@
+#!/bin/sh
+# OpenWrt functions.sh expects unset environment variables.
+. /lib/functions.sh
+. /usr/libexec/komari-agent-common
+INIT=/etc/init.d/komari-agent
+RAM=/tmp/komari-agent
+UPLOAD=$RAM/uploads/komari-agent-upload.tar.gz
+SETTINGS=$RAM/uploads/settings.json
+LOCK=$RAM/update/lock
+OPLOCK=$RAM/operation-lock
+HELD=0
+fail() { printf '%s\n' "$*" >&2; exit 1; }
+running() {
+ [ "$(ubus call service list '{"name":"komari-agent"}' 2>/dev/null | jsonfilter -e '@["komari-agent"].instances.agent.running' 2>/dev/null)" = true ]
+}
+cleanup() { [ "$HELD" = 0 ] || rmdir "$OPLOCK" 2>/dev/null; }
+trap cleanup EXIT
+trap 'exit 1' INT TERM
+mkdir -p "$RAM/uploads" "$RAM/update" || exit 1
+chmod 0700 "$RAM" "$RAM/uploads" "$RAM/update"
+mutation() {
+ mkdir "$OPLOCK" 2>/dev/null || fail 'An operation is in progress. Try again later.'
+ HELD=1
+ [ ! -d "$LOCK" ] || fail 'An update is already in progress.'
+}
+stopped() { running && fail 'Stop Komari Agent before making changes.'; return 0; }
+log_category() {
+ case "$1" in
+  komari-agent) CATEGORY=agent ;;
+  update) CATEGORY=agent-update ;;
+  *) fail 'Unsupported log type' ;;
+ esac
+}
+
+case "${1:-}" in
+ status)
+  [ "$#" = 1 ] || fail 'Invalid arguments'
+  active=0; enabled=0
+  running && active=1
+  "$INIT" enabled >/dev/null 2>&1 && enabled=1
+  version="$(/usr/libexec/komari-cached-version read agent || true)"
+  printf '%s\t%s\t%s\n' "$active" "$enabled" "${version:-Not installed}"
+  ;;
+ service)
+  [ "$#" = 2 ] || fail 'Invalid arguments'
+  mutation
+  case "$2" in
+   start)
+    stopped
+    komari_agent_load || exit 1
+    [ -x /usr/bin/komari-agent ] || fail 'Komari Agent executable is not installed'
+    uci -q set komari_agent.main.enabled=1 && uci -q commit komari_agent || fail 'Failed to save configuration'
+    ;;
+   stop|enable|disable) ;;
+   *) fail 'Unsupported service action' ;;
+  esac
+  "$INIT" "$2" || fail 'Service action failed'
+  if [ "$2" = start ]; then
+   sleep 2
+   running || fail 'Komari Agent failed to start. Check the log.'
+  fi
+  ;;
+ save-settings)
+  [ "$#" = 1 ] || fail 'Invalid arguments'
+  mutation; stopped
+  [ -s "$SETTINGS" ] && [ "$(wc -c < "$SETTINGS")" -le 16384 ] || fail 'Invalid settings upload'
+  endpoint="$(jsonfilter -i "$SETTINGS" -e '@.endpoint')" || fail 'Invalid settings upload'
+  token="$(jsonfilter -i "$SETTINGS" -e '@.token')" || fail 'Invalid settings upload'
+  interval="$(jsonfilter -i "$SETTINGS" -e '@.interval')" || fail 'Invalid settings upload'
+  disable_web_ssh="$(jsonfilter -i "$SETTINGS" -e '@.disable_web_ssh')" || fail 'Invalid settings upload'
+  ignore_unsafe_cert="$(jsonfilter -i "$SETTINGS" -e '@.ignore_unsafe_cert')" || fail 'Invalid settings upload'
+  include_nics="$(jsonfilter -i "$SETTINGS" -e '@.include_nics')" || fail 'Invalid settings upload'
+  exclude_nics="$(jsonfilter -i "$SETTINGS" -e '@.exclude_nics')" || fail 'Invalid settings upload'
+  include_mountpoints="$(jsonfilter -i "$SETTINGS" -e '@.include_mountpoints')" || fail 'Invalid settings upload'
+  memory_include_cache="$(jsonfilter -i "$SETTINGS" -e '@.memory_include_cache')" || fail 'Invalid settings upload'
+  get_ip_addr_from_nic="$(jsonfilter -i "$SETTINGS" -e '@.get_ip_addr_from_nic')" || fail 'Invalid settings upload'
+  month_rotate="$(jsonfilter -i "$SETTINGS" -e '@.month_rotate')" || fail 'Invalid settings upload'
+  komari_agent_validate || exit 1
+  uci -q set "komari_agent.main.endpoint=$endpoint" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.token=$token" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.interval=$interval" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.disable_web_ssh=$disable_web_ssh" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.ignore_unsafe_cert=$ignore_unsafe_cert" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.include_nics=$include_nics" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.exclude_nics=$exclude_nics" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.include_mountpoints=$include_mountpoints" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.memory_include_cache=$memory_include_cache" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.get_ip_addr_from_nic=$get_ip_addr_from_nic" || fail 'Failed to save configuration'
+  uci -q set "komari_agent.main.month_rotate=$month_rotate" || fail 'Failed to save configuration'
+  uci -q commit komari_agent || fail 'Failed to save configuration'
+  rm -f "$SETTINGS"
+  printf '%s\n' 'Configuration saved. Start the service manually.'
+  ;;
+ read-log|clear-log)
+  [ "$#" = 2 ] || fail 'Invalid arguments'
+  log_category "$2"
+  case "$1" in read-log) action=read ;; clear-log) action=clear ;; esac
+  /usr/libexec/komari-system-log "$action" "$CATEGORY" || fail 'Failed to read system log'
+  ;;
+ update-online|update-local)
+  [ "$#" = 1 ] || fail 'Invalid arguments'
+  stopped
+  [ ! -d "$LOCK" ] && [ ! -d "$OPLOCK" ] || fail 'An update is already in progress.'
+  printf 'running\t1\tUpdate started.\n' > "$RAM/update/status"
+  if [ "$1" = update-online ]; then
+   /sbin/start-stop-daemon -S -b -O /dev/null -x /usr/libexec/komari-agent-update -- online || fail 'Failed to start update'
+  else
+   [ -s "$UPLOAD" ] || fail 'The uploaded file is empty'
+   /sbin/start-stop-daemon -S -b -O /dev/null -x /usr/libexec/komari-agent-update -- local "$UPLOAD" || fail 'Failed to start update'
+  fi
+  printf '%s\n' 'Update started.'
+  ;;
+ update-status)
+  [ "$#" = 1 ] || fail 'Invalid arguments'
+  if [ -s "$RAM/update/status" ]; then cat "$RAM/update/status"; else printf 'idle\t0\tNo update has started.\n'; fi
+  ;;
+ *) fail 'Unsupported command' ;;
+esac

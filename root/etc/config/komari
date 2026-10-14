@@ -1,0 +1,5 @@
+config komari 'main'
+ option enabled '0'
+ option listen_host '0.0.0.0'
+ option listen_port '25774'
+ option data_dir '/etc/komari'

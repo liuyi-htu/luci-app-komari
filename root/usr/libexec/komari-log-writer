@@ -1,0 +1,17 @@
+#!/bin/sh
+# Native OpenWrt file logging, using the existing system retention setting.
+[ "$#" = 1 ] || exit 2
+case "$1" in
+ server) pattern='^komari-run\[[0-9][0-9]*\]:' ;;
+ agent) pattern='^komari-agent-run\[[0-9][0-9]*\]:' ;;
+ server-update) pattern='^komari-server-update:' ;;
+ agent-update) pattern='^komari-agent-update:' ;;
+ *) exit 2 ;;
+esac
+mkdir -p /var/log/komari || exit 1
+chmod 0700 /var/log/komari
+umask 077
+size="$(uci -q get system.@system[0].log_size)"
+set -- /sbin/logread -f -F "/var/log/komari/$1.log" -e "$pattern"
+case "$size" in ''|*[!0-9]*) ;; *) [ "$size" -eq 0 ] || set -- "$@" -S "$size" ;; esac
+exec "$@"

@@ -1,0 +1,9 @@
+#!/bin/sh
+[ "$#" = 2 ] || exit 2
+case "$2" in server|agent|server-update|agent-update) ;; *) exit 2 ;; esac
+file=/var/log/komari/$2.log
+case "$1" in
+ read) [ ! -f "$file" ] || cat "$file" ;;
+ clear) mkdir -p /var/log/komari && (umask 077; : > "$file") ;;
+ *) exit 2 ;;
+esac

@@ -1,0 +1,34 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+USE_PROCD=1
+PROG=/usr/bin/komari
+. /usr/libexec/komari-common
+
+start_service() {
+ local enabled listen_host listen_port data_dir listen
+ config_load komari
+ config_get enabled main enabled '0'
+ [ "$enabled" = '1' ] || return 0
+ [ -x "$PROG" ] || { komari_error 'Komari executable is not installed'; return 1; }
+ komari_load || return 1
+ mkdir -p "$data_dir/data" /var/log || return 1
+ chmod 0700 "$data_dir" "$data_dir/data"
+ procd_open_instance server-log
+ procd_set_param command /usr/libexec/komari-log-writer server
+ procd_set_param respawn 3600 5 5
+ procd_close_instance
+ procd_open_instance server
+ procd_set_param command /usr/libexec/komari-run "$data_dir" "$listen"
+ procd_set_param respawn 3600 5 5
+ procd_set_param stdout 1
+ procd_set_param stderr 1
+ procd_close_instance
+}
+
+reload_service() {
+ pidof komari >/dev/null 2>&1 || return 0
+ restart
+}
+
+service_triggers() { procd_add_reload_trigger komari; }

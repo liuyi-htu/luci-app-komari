@@ -1,0 +1,39 @@
+#!/bin/sh
+mkdir -p /tmp/komari/uploads /tmp/komari/update
+chmod 0700 /tmp/komari /tmp/komari/uploads /tmp/komari/update
+chmod 0600 /etc/config/komari
+mkdir -p /var/log/komari
+chmod 0700 /var/log/komari
+for name in server agent server-update agent-update; do
+ if [ -f "/var/log/$name.log" ] && [ ! -e "/var/log/komari/$name.log" ]; then
+  mv "/var/log/$name.log" "/var/log/komari/$name.log"
+ fi
+ (umask 077; touch "/var/log/komari/$name.log")
+ chmod 0600 "/var/log/komari/$name.log"
+done
+# Preserve existing settings and append the Agent section on package upgrade.
+if ! uci -q get komari_agent.main >/dev/null; then
+ uci set komari_agent.main=agent
+ uci set komari_agent.main.enabled=0
+ uci set komari_agent.main.interval=3
+ uci set komari_agent.main.disable_web_ssh=1
+ uci set komari_agent.main.ignore_unsafe_cert=0
+ uci commit komari_agent
+fi
+for field in memory_include_cache get_ip_addr_from_nic month_rotate; do
+ uci -q get "komari_agent.main.$field" >/dev/null || uci set "komari_agent.main.$field=0"
+done
+uci commit komari_agent
+for config in komari komari_agent; do
+ uci -q delete "$config.main.log_level" 2>/dev/null || true
+ uci commit "$config"
+done
+chmod 0600 /etc/config/komari_agent
+chmod 0755 /etc/init.d/komari /etc/init.d/komari-agent /usr/libexec/komari-*
+# Like frpc: register both services during package installation / image first boot.
+# Each init script still respects its UCI enabled switch and validates its core.
+/etc/init.d/komari enable
+/etc/init.d/komari-agent enable
+rm -f /tmp/luci-indexcache /tmp/luci-indexcache.*.json
+rm -rf /tmp/luci-modulecache/
+exit 0

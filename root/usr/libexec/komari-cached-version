@@ -1,0 +1,45 @@
+#!/bin/sh
+[ "$#" = 2 ] || exit 2
+case "$2" in
+ server) binary=/usr/bin/komari ;;
+ agent) binary=/usr/bin/komari-agent ;;
+ *) exit 2 ;;
+esac
+case "$1" in read|refresh|detect) ;; *) exit 2 ;; esac
+[ -x "$binary" ] || { printf '%s\n' 'Not installed'; exit 0; }
+if [ "$1" = detect ]; then
+ case "$2" in
+  server) . /usr/libexec/komari-common; komari_version "$binary" ;;
+  agent) . /usr/libexec/komari-agent-common; komari_agent_version "$binary" ;;
+ esac
+ exit $?
+fi
+ram=/tmp/komari-versions
+cache=$ram/$2
+lock=$cache.lock
+signature="$(LC_ALL=C ls -inL "$binary")" || exit 1
+mkdir -p "$ram" || exit 1
+chmod 0700 "$ram"
+key=; version=
+if [ -f "$cache" ]; then
+ { IFS= read -r key; IFS= read -r version; } < "$cache"
+fi
+if [ "$key" = "$signature" ] && [ -n "$version" ]; then
+ printf '%s\n' "$version"
+ exit 0
+fi
+if [ "$1" = read ]; then
+ # Never hold up the page or its status poll to scan/start a core.
+ /usr/libexec/komari-cached-version refresh "$2" </dev/null >/dev/null 2>&1 &
+ printf '%s\n' 'Checking version...'
+ exit 0
+fi
+mkdir "$lock" 2>/dev/null || exit 0
+trap 'rm -f "$cache.$$"; rmdir "$lock" 2>/dev/null' EXIT
+trap 'exit 1' INT TERM
+version="$(timeout 30 /usr/libexec/komari-cached-version detect "$2" 2>/dev/null)"
+[ -n "$version" ] || version='Unknown version'
+# A concurrent core replacement must not leave a version for the wrong file.
+[ "$signature" = "$(LC_ALL=C ls -inL "$binary")" ] || exit 0
+(umask 077; printf '%s\n%s\n' "$signature" "$version" > "$cache.$$") && mv -f "$cache.$$" "$cache"
+printf '%s\n' "$version"

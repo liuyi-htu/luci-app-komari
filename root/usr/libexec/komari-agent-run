@@ -1,0 +1,4 @@
+#!/bin/sh
+cd /tmp/komari-agent || exit 1
+umask 077
+exec /usr/bin/komari-agent

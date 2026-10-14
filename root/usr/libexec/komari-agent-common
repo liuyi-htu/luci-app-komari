@@ -1,0 +1,41 @@
+#!/bin/sh
+komari_agent_validate() {
+ case "$endpoint" in
+  http://?*|https://?*) ;; *) komari_error 'Panel URL must start with http:// or https://'; return 1 ;;
+ esac
+ case "$endpoint" in *[!a-zA-Z0-9.:/_%?=\&+-]*|*'@'*) komari_error 'Invalid panel URL'; return 1 ;; esac
+ case "$token" in ''|*[!a-zA-Z0-9._-]*) komari_error 'Agent token is required and must contain only letters, digits, dots, underscores or hyphens'; return 1 ;; esac
+ case "$interval" in ''|*[!0-9]*) komari_error 'Invalid collection interval'; return 1 ;; esac
+ [ "${#interval}" -le 4 ] && [ "$interval" -ge 1 ] && [ "$interval" -le 3600 ] || { komari_error 'Collection interval must be between 1 and 3600 seconds'; return 1; }
+ case "$disable_web_ssh:$ignore_unsafe_cert:$memory_include_cache:$get_ip_addr_from_nic" in [01]:[01]:[01]:[01]) ;; *) komari_error 'Invalid boolean value'; return 1 ;; esac
+ case "$month_rotate" in ''|*[!0-9]*) komari_error 'Invalid network reset day'; return 1 ;; esac
+ [ "${#month_rotate}" -le 2 ] && [ "$month_rotate" -ge 0 ] && [ "$month_rotate" -le 31 ] || { komari_error 'Network reset day must be between 0 and 31'; return 1; }
+ case "$include_nics$exclude_nics" in *[!a-zA-Z0-9,._:@-]*) komari_error 'Invalid network interface list'; return 1 ;; esac
+ case "$include_mountpoints" in *[!a-zA-Z0-9/._\;-]*) komari_error 'Invalid mount point list'; return 1 ;; esac
+}
+komari_error() { printf '%s\n' "$*" >&2; return 1; }
+komari_agent_load() {
+ config_load komari_agent
+ config_get endpoint main endpoint
+ config_get token main token
+ config_get interval main interval '3'
+ config_get disable_web_ssh main disable_web_ssh '1'
+ config_get ignore_unsafe_cert main ignore_unsafe_cert '0'
+ config_get memory_include_cache main memory_include_cache '0'
+ config_get get_ip_addr_from_nic main get_ip_addr_from_nic '0'
+ config_get month_rotate main month_rotate '0'
+ config_get include_nics main include_nics
+ config_get exclude_nics main exclude_nics
+ config_get include_mountpoints main include_mountpoints
+ komari_agent_validate
+}
+komari_agent_version() {
+ [ -x "$1" ] || return 1
+ # Official Go releases store CurrentVersion as a standalone NUL-delimited
+ # string. Only accept an unambiguous semantic version; never start the Agent
+ # or make network requests when checking its installed version.
+ local versions
+ versions="$(tr '\000' '\n' < "$1" | sed -n '/^[vV]*[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$/p' | sed 's/^[vV]//' | sort -u)"
+ [ "$(printf '%s\n' "$versions" | wc -l)" = 1 ] && [ -n "$versions" ] || return 1
+ printf '%s\n' "$versions"
+}

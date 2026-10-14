@@ -1,0 +1,582 @@
+msgid ""
+msgstr ""
+"Language: zh_Hans\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "komari"
+msgid "Agent settings"
+msgstr "Agent 设置"
+
+msgctxt "komari"
+msgid "Agent token"
+msgstr "Agent Token"
+
+msgctxt "komari"
+msgid "Agent token is required and must contain only letters, digits, dots, underscores or hyphens"
+msgstr "Agent Token 不能为空，且只能包含字母、数字、点、下划线和连字符"
+
+msgctxt "komari"
+msgid "An operation is in progress. Try again later."
+msgstr "操作正在进行，请稍后再试。"
+
+msgctxt "komari"
+msgid "An update is already in progress."
+msgstr "已有更新任务正在执行。"
+
+msgctxt "komari"
+msgid "Autostart"
+msgstr "开机自启"
+
+msgctxt "komari"
+msgid "Autostart disabled."
+msgstr "已关闭开机自启。"
+
+msgctxt "komari"
+msgid "Autostart enabled."
+msgstr "已启用开机自启。"
+
+msgctxt "komari"
+msgid "Check for online updates?"
+msgstr "确认启动在线更新检查？"
+
+msgctxt "komari"
+msgid "Checking the latest GitHub release..."
+msgstr "正在查询 GitHub 最新版本…"
+
+msgctxt "komari"
+msgid "Clear log"
+msgstr "清空日志"
+
+msgctxt "komari"
+msgid "Clear the selected log?"
+msgstr "确认清空当前日志？"
+
+msgctxt "komari"
+msgid "Click Refresh log to read the log."
+msgstr "点击“刷新日志”读取日志。"
+
+msgctxt "komari"
+msgid "Close"
+msgstr "关闭"
+
+msgctxt "komari"
+msgid "Collection interval (seconds)"
+msgstr "采集间隔（秒）"
+
+msgctxt "komari"
+msgid "Collection interval must be between 1 and 3600 seconds"
+msgstr "采集间隔必须为 1 至 3600 秒"
+
+msgctxt "komari"
+msgid "Command failed"
+msgstr "命令执行失败"
+
+msgctxt "komari"
+msgid "Configuration saved."
+msgstr "配置已保存。"
+
+msgctxt "komari"
+msgid "Configuration saved. Start the service manually."
+msgstr "配置已保存，请手动启动服务。"
+
+msgctxt "komari"
+msgctxt "komari"
+msgid "Data directory"
+msgstr "数据目录"
+
+msgctxt "komari"
+msgid "Data directory must be an absolute path"
+msgstr "数据目录必须为绝对路径"
+
+msgctxt "komari"
+msgid "Database, themes and other persistent files are stored here. Changing this path does not move existing data."
+msgstr "数据库、主题等持久化文件保存在此目录。修改路径不会迁移已有数据。"
+
+msgctxt "komari"
+msgid "Disable autostart"
+msgstr "关闭开机自启"
+
+msgctxt "komari"
+msgid "Disable remote control"
+msgstr "禁用远程控制"
+
+msgctxt "komari"
+msgid "Disabled"
+msgstr "未启用"
+
+msgctxt "komari"
+msgid "Downloading Komari Agent..."
+msgstr "正在下载 Komari Agent…"
+
+msgctxt "komari"
+msgid "Downloading Komari..."
+msgstr "正在下载 Komari…"
+
+msgctxt "komari"
+msgid "Enable autostart"
+msgstr "启用开机自启"
+
+msgctxt "komari"
+msgid "Enabled"
+msgstr "已启用"
+
+msgctxt "komari"
+msgid "Exclude network interfaces"
+msgstr "排除指定网卡"
+
+msgctxt "komari"
+msgid "Failed to clear log"
+msgstr "清空日志失败"
+
+msgctxt "komari"
+msgid "Failed to create temporary work directory"
+msgstr "无法创建内存工作目录"
+
+msgctxt "komari"
+msgid "Failed to download the latest release"
+msgstr "下载最新版失败"
+
+msgctxt "komari"
+msgid "Failed to install new Komari"
+msgstr "安装新 Komari 核心失败"
+
+msgctxt "komari"
+msgid "Failed to install new Komari Agent"
+msgstr "安装新 Komari Agent 核心失败"
+
+msgctxt "komari"
+msgid "Failed to make the candidate executable"
+msgstr "无法设置候选文件执行权限"
+
+msgctxt "komari"
+msgid "Failed to query the latest GitHub release"
+msgstr "查询 GitHub 最新版本失败"
+
+msgctxt "komari"
+msgid "Failed to read upload"
+msgstr "读取上传文件失败"
+
+msgctxt "komari"
+msgid "Failed to save configuration"
+msgstr "保存配置失败"
+
+msgctxt "komari"
+msgid "Failed to start update"
+msgstr "启动更新失败"
+
+msgctxt "komari"
+msgid "Failed to write new Komari"
+msgstr "写入新 Komari 核心失败"
+
+msgctxt "komari"
+msgid "Failed to write new Komari Agent"
+msgstr "写入新 Komari Agent 核心失败"
+
+msgctxt "komari"
+msgid "Ignore unsafe TLS certificates"
+msgstr "忽略不安全的 TLS 证书"
+
+msgctxt "komari"
+msgid "Include mount points"
+msgstr "仅统计指定挂载点"
+
+msgctxt "komari"
+msgid "Include network interfaces"
+msgstr "仅统计指定网卡"
+
+msgctxt "komari"
+msgid "Installing Komari Agent..."
+msgstr "正在安装 Komari Agent…"
+
+msgctxt "komari"
+msgid "Installing Komari..."
+msgstr "正在安装 Komari…"
+
+msgctxt "komari"
+msgid "Invalid arguments"
+msgstr "参数无效"
+
+msgctxt "komari"
+msgid "Invalid boolean value"
+msgstr "布尔值无效"
+
+msgctxt "komari"
+msgid "Invalid collection interval"
+msgstr "采集间隔无效"
+
+msgctxt "komari"
+msgid "Invalid data directory"
+msgstr "数据目录无效"
+
+msgctxt "komari"
+msgid "Invalid listen address"
+msgstr "监听地址无效"
+
+msgctxt "komari"
+msgid "Invalid listen port"
+msgstr "监听端口无效"
+
+msgctxt "komari"
+msgid "Invalid mount point list"
+msgstr "挂载点列表无效"
+
+msgctxt "komari"
+msgid "Invalid network interface list"
+msgstr "网卡列表无效"
+
+msgctxt "komari"
+msgid "Invalid panel URL"
+msgstr "面板地址无效"
+
+msgctxt "komari"
+msgid "Invalid settings upload"
+msgstr "上传的配置无效"
+
+msgctxt "komari"
+msgid "Invalid upload path"
+msgstr "上传文件路径无效"
+
+msgctxt "komari"
+msgid "Komari"
+msgstr "Komari"
+
+msgctxt "komari"
+msgid "Komari Agent"
+msgstr "Komari Agent"
+
+msgctxt "komari"
+msgid "Komari Agent executable is not installed"
+msgstr "尚未安装 Komari Agent 核心"
+
+msgctxt "komari"
+msgid "Komari Agent failed to start. Check the log."
+msgstr "Komari Agent 启动失败，请查看日志。"
+
+msgctxt "komari"
+msgid "Komari Agent is running. Stop the service before saving configuration."
+msgstr "Komari Agent 正在运行，请停止服务后再保存配置。"
+
+msgctxt "komari"
+msgid "Komari Agent started."
+msgstr "Komari Agent 已启动。"
+
+msgctxt "komari"
+msgid "Komari Agent stopped."
+msgstr "Komari Agent 已停止。"
+
+msgctxt "komari"
+msgid "Komari Agent updated to %s."
+msgstr "Komari Agent 已更新至 %s。"
+
+msgctxt "komari"
+msgid "Komari executable is not installed"
+msgstr "尚未安装 Komari 核心"
+
+msgctxt "komari"
+msgid "Komari failed to start. Check the log."
+msgstr "Komari 启动失败，请查看日志。"
+
+msgctxt "komari"
+msgid "Komari server"
+msgstr "Komari 服务端"
+
+msgctxt "komari"
+msgid "Komari updated to %s."
+msgstr "Komari 已更新至 %s。"
+
+msgctxt "komari"
+msgid "Listen address"
+msgstr "监听地址"
+
+msgctxt "komari"
+msgid "Listen port"
+msgstr "监听端口"
+
+msgctxt "komari"
+msgid "Listen port is out of range"
+msgstr "监听端口超出范围"
+
+msgctxt "komari"
+msgid "Log cleared."
+msgstr "日志已清空。"
+
+msgctxt "komari"
+msgid "Logs"
+msgstr "日志"
+
+msgctxt "komari"
+msgid "Missing upload"
+msgstr "缺少上传文件"
+
+msgctxt "komari"
+msgid "No log entries."
+msgstr "暂无日志。"
+
+msgctxt "komari"
+msgid "No official release asset exists for this CPU architecture"
+msgstr "官方未提供适用于此 CPU 架构的发布文件"
+
+msgctxt "komari"
+msgid "No update has started."
+msgstr "尚未开始更新。"
+
+msgctxt "komari"
+msgid "Not installed"
+msgstr "未安装"
+
+msgctxt "komari"
+msgid "Notice"
+msgstr "提示"
+
+msgctxt "komari"
+msgid "Online update"
+msgstr "在线更新"
+
+msgctxt "komari"
+msgid "Online update does not support this CPU architecture"
+msgstr "当前 CPU 架构不受在线更新支持"
+
+msgctxt "komari"
+msgid "Open Komari dashboard"
+msgstr "打开 Komari 面板"
+
+msgctxt "komari"
+msgid "Operation failed"
+msgstr "操作失败"
+
+msgctxt "komari"
+msgid "Panel URL"
+msgstr "面板地址"
+
+msgctxt "komari"
+msgid "Panel URL must start with http:// or https://"
+msgstr "面板地址必须以 http:// 或 https:// 开头"
+
+msgctxt "komari"
+msgid "Reading update status again..."
+msgstr "正在重新读取更新状态…"
+
+msgctxt "komari"
+msgid "Reading upload..."
+msgstr "正在读取上传文件…"
+
+msgctxt "komari"
+msgid "Refresh log"
+msgstr "刷新日志"
+
+msgctxt "komari"
+msgid "Release checksum verification failed"
+msgstr "发布文件校验和验证失败"
+
+msgctxt "komari"
+msgid "Running"
+msgstr "运行中"
+
+msgctxt "komari"
+msgid "Save configuration"
+msgstr "保存配置"
+
+msgctxt "komari"
+msgid "Server settings"
+msgstr "服务端设置"
+
+msgctxt "komari"
+msgid "Service action failed"
+msgstr "服务操作失败"
+
+msgctxt "komari"
+msgid "Service status"
+msgstr "服务状态"
+
+msgctxt "komari"
+msgid "Start service"
+msgstr "启动服务"
+
+msgctxt "komari"
+msgid "Starting online update..."
+msgstr "正在启动在线更新…"
+
+msgctxt "komari"
+msgid "Stop Komari Agent before making changes."
+msgstr "请停止 Komari Agent 后再修改。"
+
+msgctxt "komari"
+msgid "Stop Komari before making changes."
+msgstr "请停止 Komari 后再修改。"
+
+msgctxt "komari"
+msgid "Stop komari before making changes."
+msgstr "请先停止 Komari，再进行操作。"
+
+msgctxt "komari"
+msgid "Stop service"
+msgstr "停止服务"
+
+msgctxt "komari"
+msgid "Stopped"
+msgstr "已停止"
+
+msgctxt "komari"
+msgid "The candidate is not a Linux ELF executable"
+msgstr "待安装文件不是 Linux ELF 可执行文件"
+
+msgctxt "komari"
+msgid "The candidate is not a valid Komari Agent executable for this device"
+msgstr "待安装文件不是适用于此设备的 Komari Agent 核心"
+
+msgctxt "komari"
+msgid "The candidate is not a valid Komari executable for this device"
+msgstr "待安装文件不是适用于此设备的 Komari 核心"
+
+msgctxt "komari"
+msgid "The installed core is already up to date."
+msgstr "已安装的核心版本无需更新。"
+
+msgctxt "komari"
+msgid "The uploaded file is empty"
+msgstr "上传文件为空"
+
+msgctxt "komari"
+msgid "The uploaded file must not exceed 128 MiB."
+msgstr "上传文件不能超过 128 MiB。"
+
+msgctxt "komari"
+msgid "This field is required."
+msgstr "不能为空。"
+
+msgctxt "komari"
+msgid "Unable to read Komari Agent service status."
+msgstr "无法读取 Komari Agent 服务状态。"
+
+msgctxt "komari"
+msgid "Unable to read komari service status."
+msgstr "无法读取 Komari 运行状态。"
+
+msgctxt "komari"
+msgid "Unsupported command"
+msgstr "不支持的命令"
+
+msgctxt "komari"
+msgid "Unsupported log type"
+msgstr "不支持的日志类型"
+
+msgctxt "komari"
+msgid "Unsupported service action"
+msgstr "不支持的服务操作"
+
+msgctxt "komari"
+msgid "Unsupported update method"
+msgstr "不支持的更新方式"
+
+msgctxt "komari"
+msgid "Update Agent core"
+msgstr "更新 Agent 核心"
+
+msgctxt "komari"
+msgid "Update core"
+msgstr "更新内核"
+
+msgctxt "komari"
+msgid "Update failed: %s"
+msgstr "更新失败：%s"
+
+msgctxt "komari"
+msgid "Update started."
+msgstr "更新任务已启动。"
+
+msgctxt "komari"
+msgid "Upload Komari Agent or tar.gz"
+msgstr "上传 Komari Agent 或 tar.gz"
+
+msgctxt "komari"
+msgid "Upload Komari or tar.gz"
+msgstr "上传 Komari 或 tar.gz"
+
+msgctxt "komari"
+msgid "Verifying candidate Komari Agent..."
+msgstr "正在校验待安装的 Komari Agent…"
+
+msgctxt "komari"
+msgid "Verifying candidate Komari..."
+msgstr "正在校验待安装的 Komari…"
+
+msgctxt "komari"
+msgid "Version"
+msgstr "版本"
+
+msgctxt "komari"
+msgid "komari is running. Stop the service before saving configuration."
+msgstr "Komari 正在运行，请先停止服务再保存配置。"
+
+msgctxt "komari"
+msgid "komari started."
+msgstr "Komari 已启动。"
+
+msgctxt "komari"
+msgid "komari stopped."
+msgstr "Komari 已停止。"
+
+
+msgctxt "komari"
+msgid "Server"
+msgstr "服务端"
+
+msgctxt "komari"
+msgid "Agent"
+msgstr "Agent"
+
+msgctxt "komari"
+msgid "Logs and core updates"
+msgstr "日志与核心更新"
+
+msgctxt "komari"
+msgid "Service"
+msgstr "服务"
+
+msgctxt "komari"
+msgid "Include cached and buffered memory"
+msgstr "包含缓冲区内存"
+
+msgctxt "komari"
+msgid "Get IP address from network interfaces"
+msgstr "从网卡获取 IP 地址"
+
+msgctxt "komari"
+msgid "Monthly network reset day"
+msgstr "网络统计月重置日"
+
+msgctxt "komari"
+msgid "Use 0 to disable monthly reset, or 1-31 for the day of the month."
+msgstr "0 表示禁用月重置，1 至 31 表示每月重置日期。"
+
+msgctxt "komari"
+msgid "Invalid network reset day"
+msgstr "网络统计重置日无效"
+
+msgctxt "komari"
+msgid "Network reset day must be between 0 and 31"
+msgstr "网络统计重置日必须在 0 至 31 之间"
+
+msgctxt "komari"
+msgid "Log level"
+msgstr "日志等级"
+
+msgctxt "komari"
+msgid "Filters captured service output. Does not change the core internal log level."
+msgstr "筛选服务输出日志，不改变核心内部的日志等级。"
+
+msgctxt "komari"
+msgid "Invalid log level"
+msgstr "日志等级无效"
+
+msgctxt "komari"
+
+msgctxt "komari"
+msgid "Checking version..."
+msgstr "正在检测版本…"
+
+msgctxt "komari"
+msgid "Unknown version"
+msgstr "未知版本"

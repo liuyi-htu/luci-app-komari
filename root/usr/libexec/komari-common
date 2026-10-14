@@ -1,0 +1,37 @@
+#!/bin/sh
+
+komari_error() { printf '%s\n' "$*" >&2; return 1; }
+
+komari_validate() {
+ case "$listen_host" in
+  ''|*[!a-zA-Z0-9.:_-]*) komari_error 'Invalid listen address'; return 1 ;;
+ esac
+ case "$listen_port" in
+  ''|*[!0-9]*) komari_error 'Invalid listen port'; return 1 ;;
+ esac
+ [ "${#listen_port}" -le 5 ] && [ "$listen_port" -ge 1 ] && [ "$listen_port" -le 65535 ] || { komari_error 'Listen port is out of range'; return 1; }
+ case "$data_dir" in
+  /*) ;; *) komari_error 'Data directory must be an absolute path'; return 1 ;;
+ esac
+ case "$data_dir" in
+  /|*/../*|*/..|*/./*|*/.|*[!a-zA-Z0-9/._-]*) komari_error 'Invalid data directory'; return 1 ;;
+ esac
+}
+
+komari_load() {
+ config_load komari
+ config_get listen_host main listen_host '0.0.0.0'
+ config_get listen_port main listen_port '25774'
+ config_get data_dir main data_dir '/etc/komari'
+ komari_validate || return 1
+ case "$listen_host" in
+  *:*) listen="[$listen_host]:$listen_port" ;;
+  *) listen="$listen_host:$listen_port" ;;
+ esac
+}
+
+komari_version() {
+ [ -x "$1" ] || return 1
+ # Komari logs its version before processing --help; it has no -v command.
+ timeout 10 "$1" --help 2>&1 | sed -n 's/.*Komari Monitor [vV]*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/p' | head -n 1
+}

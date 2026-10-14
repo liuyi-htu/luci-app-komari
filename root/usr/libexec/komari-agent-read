@@ -1,0 +1,5 @@
+#!/bin/sh
+case "${1:-}" in
+ status|read-log|update-status) exec /usr/libexec/komari-agent-ui "$@" ;;
+ *) printf '%s\n' 'Read-only command required' >&2; exit 1 ;;
+esac

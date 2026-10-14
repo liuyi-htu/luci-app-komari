@@ -1,0 +1,582 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "komari"
+msgid "Agent settings"
+msgstr ""
+
+msgctxt "komari"
+msgid "Agent token"
+msgstr ""
+
+msgctxt "komari"
+msgid "Agent token is required and must contain only letters, digits, dots, underscores or hyphens"
+msgstr ""
+
+msgctxt "komari"
+msgid "An operation is in progress. Try again later."
+msgstr ""
+
+msgctxt "komari"
+msgid "An update is already in progress."
+msgstr ""
+
+msgctxt "komari"
+msgid "Autostart"
+msgstr ""
+
+msgctxt "komari"
+msgid "Autostart disabled."
+msgstr ""
+
+msgctxt "komari"
+msgid "Autostart enabled."
+msgstr ""
+
+msgctxt "komari"
+msgid "Check for online updates?"
+msgstr ""
+
+msgctxt "komari"
+msgid "Checking the latest GitHub release..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Clear log"
+msgstr ""
+
+msgctxt "komari"
+msgid "Clear the selected log?"
+msgstr ""
+
+msgctxt "komari"
+msgid "Click Refresh log to read the log."
+msgstr ""
+
+msgctxt "komari"
+msgid "Close"
+msgstr ""
+
+msgctxt "komari"
+msgid "Collection interval (seconds)"
+msgstr ""
+
+msgctxt "komari"
+msgid "Collection interval must be between 1 and 3600 seconds"
+msgstr ""
+
+msgctxt "komari"
+msgid "Command failed"
+msgstr ""
+
+msgctxt "komari"
+msgid "Configuration saved."
+msgstr ""
+
+msgctxt "komari"
+msgid "Configuration saved. Start the service manually."
+msgstr ""
+
+msgctxt "komari"
+msgctxt "komari"
+msgid "Data directory"
+msgstr ""
+
+msgctxt "komari"
+msgid "Data directory must be an absolute path"
+msgstr ""
+
+msgctxt "komari"
+msgid "Database, themes and other persistent files are stored here. Changing this path does not move existing data."
+msgstr ""
+
+msgctxt "komari"
+msgid "Disable autostart"
+msgstr ""
+
+msgctxt "komari"
+msgid "Disable remote control"
+msgstr ""
+
+msgctxt "komari"
+msgid "Disabled"
+msgstr ""
+
+msgctxt "komari"
+msgid "Downloading Komari Agent..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Downloading Komari..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Enable autostart"
+msgstr ""
+
+msgctxt "komari"
+msgid "Enabled"
+msgstr ""
+
+msgctxt "komari"
+msgid "Exclude network interfaces"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to clear log"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to create temporary work directory"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to download the latest release"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to install new Komari"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to install new Komari Agent"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to make the candidate executable"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to query the latest GitHub release"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to read upload"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to save configuration"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to start update"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to write new Komari"
+msgstr ""
+
+msgctxt "komari"
+msgid "Failed to write new Komari Agent"
+msgstr ""
+
+msgctxt "komari"
+msgid "Ignore unsafe TLS certificates"
+msgstr ""
+
+msgctxt "komari"
+msgid "Include mount points"
+msgstr ""
+
+msgctxt "komari"
+msgid "Include network interfaces"
+msgstr ""
+
+msgctxt "komari"
+msgid "Installing Komari Agent..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Installing Komari..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid arguments"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid boolean value"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid collection interval"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid data directory"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid listen address"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid listen port"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid mount point list"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid network interface list"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid panel URL"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid settings upload"
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid upload path"
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari"
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari Agent"
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari Agent executable is not installed"
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari Agent failed to start. Check the log."
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari Agent is running. Stop the service before saving configuration."
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari Agent started."
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari Agent stopped."
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari Agent updated to %s."
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari executable is not installed"
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari failed to start. Check the log."
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari server"
+msgstr ""
+
+msgctxt "komari"
+msgid "Komari updated to %s."
+msgstr ""
+
+msgctxt "komari"
+msgid "Listen address"
+msgstr ""
+
+msgctxt "komari"
+msgid "Listen port"
+msgstr ""
+
+msgctxt "komari"
+msgid "Listen port is out of range"
+msgstr ""
+
+msgctxt "komari"
+msgid "Log cleared."
+msgstr ""
+
+msgctxt "komari"
+msgid "Logs"
+msgstr ""
+
+msgctxt "komari"
+msgid "Missing upload"
+msgstr ""
+
+msgctxt "komari"
+msgid "No log entries."
+msgstr ""
+
+msgctxt "komari"
+msgid "No official release asset exists for this CPU architecture"
+msgstr ""
+
+msgctxt "komari"
+msgid "No update has started."
+msgstr ""
+
+msgctxt "komari"
+msgid "Not installed"
+msgstr ""
+
+msgctxt "komari"
+msgid "Notice"
+msgstr ""
+
+msgctxt "komari"
+msgid "Online update"
+msgstr ""
+
+msgctxt "komari"
+msgid "Online update does not support this CPU architecture"
+msgstr ""
+
+msgctxt "komari"
+msgid "Open Komari dashboard"
+msgstr ""
+
+msgctxt "komari"
+msgid "Operation failed"
+msgstr ""
+
+msgctxt "komari"
+msgid "Panel URL"
+msgstr ""
+
+msgctxt "komari"
+msgid "Panel URL must start with http:// or https://"
+msgstr ""
+
+msgctxt "komari"
+msgid "Reading update status again..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Reading upload..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Refresh log"
+msgstr ""
+
+msgctxt "komari"
+msgid "Release checksum verification failed"
+msgstr ""
+
+msgctxt "komari"
+msgid "Running"
+msgstr ""
+
+msgctxt "komari"
+msgid "Save configuration"
+msgstr ""
+
+msgctxt "komari"
+msgid "Server settings"
+msgstr ""
+
+msgctxt "komari"
+msgid "Service action failed"
+msgstr ""
+
+msgctxt "komari"
+msgid "Service status"
+msgstr ""
+
+msgctxt "komari"
+msgid "Start service"
+msgstr ""
+
+msgctxt "komari"
+msgid "Starting online update..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Stop Komari Agent before making changes."
+msgstr ""
+
+msgctxt "komari"
+msgid "Stop Komari before making changes."
+msgstr ""
+
+msgctxt "komari"
+msgid "Stop komari before making changes."
+msgstr ""
+
+msgctxt "komari"
+msgid "Stop service"
+msgstr ""
+
+msgctxt "komari"
+msgid "Stopped"
+msgstr ""
+
+msgctxt "komari"
+msgid "The candidate is not a Linux ELF executable"
+msgstr ""
+
+msgctxt "komari"
+msgid "The candidate is not a valid Komari Agent executable for this device"
+msgstr ""
+
+msgctxt "komari"
+msgid "The candidate is not a valid Komari executable for this device"
+msgstr ""
+
+msgctxt "komari"
+msgid "The installed core is already up to date."
+msgstr ""
+
+msgctxt "komari"
+msgid "The uploaded file is empty"
+msgstr ""
+
+msgctxt "komari"
+msgid "The uploaded file must not exceed 128 MiB."
+msgstr ""
+
+msgctxt "komari"
+msgid "This field is required."
+msgstr ""
+
+msgctxt "komari"
+msgid "Unable to read Komari Agent service status."
+msgstr ""
+
+msgctxt "komari"
+msgid "Unable to read komari service status."
+msgstr ""
+
+msgctxt "komari"
+msgid "Unsupported command"
+msgstr ""
+
+msgctxt "komari"
+msgid "Unsupported log type"
+msgstr ""
+
+msgctxt "komari"
+msgid "Unsupported service action"
+msgstr ""
+
+msgctxt "komari"
+msgid "Unsupported update method"
+msgstr ""
+
+msgctxt "komari"
+msgid "Update Agent core"
+msgstr ""
+
+msgctxt "komari"
+msgid "Update core"
+msgstr ""
+
+msgctxt "komari"
+msgid "Update failed: %s"
+msgstr ""
+
+msgctxt "komari"
+msgid "Update started."
+msgstr ""
+
+msgctxt "komari"
+msgid "Upload Komari Agent or tar.gz"
+msgstr ""
+
+msgctxt "komari"
+msgid "Upload Komari or tar.gz"
+msgstr ""
+
+msgctxt "komari"
+msgid "Verifying candidate Komari Agent..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Verifying candidate Komari..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Version"
+msgstr ""
+
+msgctxt "komari"
+msgid "komari is running. Stop the service before saving configuration."
+msgstr ""
+
+msgctxt "komari"
+msgid "komari started."
+msgstr ""
+
+msgctxt "komari"
+msgid "komari stopped."
+msgstr ""
+
+
+msgctxt "komari"
+msgid "Server"
+msgstr ""
+
+msgctxt "komari"
+msgid "Agent"
+msgstr ""
+
+msgctxt "komari"
+msgid "Logs and core updates"
+msgstr ""
+
+msgctxt "komari"
+msgid "Service"
+msgstr ""
+
+msgctxt "komari"
+msgid "Include cached and buffered memory"
+msgstr ""
+
+msgctxt "komari"
+msgid "Get IP address from network interfaces"
+msgstr ""
+
+msgctxt "komari"
+msgid "Monthly network reset day"
+msgstr ""
+
+msgctxt "komari"
+msgid "Use 0 to disable monthly reset, or 1-31 for the day of the month."
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid network reset day"
+msgstr ""
+
+msgctxt "komari"
+msgid "Network reset day must be between 0 and 31"
+msgstr ""
+
+msgctxt "komari"
+msgid "Log level"
+msgstr ""
+
+msgctxt "komari"
+msgid "Filters captured service output. Does not change the core internal log level."
+msgstr ""
+
+msgctxt "komari"
+msgid "Invalid log level"
+msgstr ""
+
+msgctxt "komari"
+
+msgctxt "komari"
+msgid "Checking version..."
+msgstr ""
+
+msgctxt "komari"
+msgid "Unknown version"
+msgstr ""
